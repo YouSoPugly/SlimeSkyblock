@@ -1,0 +1,43 @@
+# This is the default language file for the plugin.
+# You can change the text to whatever you want.
+# Do not change the keys (the text before the = sign) as they are used to identify the text in the plugin.
+# Use minimessage formatting to format the text. You can find more information about minimessage
+# formatting at https://docs.adventure.kyori.net/minimessage.html
+############################################################
+# You can also use the following tags in the text:
+# <prefix>
+# <gen-tier> - When applicable, this will be replaced with the generator tier.
+############################################################
+prefix: "<rainbow>SKYBLOCK ⟫</rainbow>"
+no-permission: "<gradient:red:dark_red>You do not have permission to do this!"
+# Island Command Messages
+island-help:
+  - "<gray>-- Island Help --"
+  - "<gradient:green:blue>/island create - Create an island"
+  - "<gradient:green:blue>/island home - Teleport to your island"
+  - "<gradient:green:blue>/island sethome - Set your island home"
+  - "<gradient:green:blue>/island visit <player> - Visit another player's island"
+  - "<gradient:green:blue>/island lock - Lock your island"
+  - "<gradient:green:blue>/island unlock - Unlock your island"
+creating-island: "<prefix> <gradient:green:blue>Creating your island..."
+island-created: "<prefix> <gradient:green:blue>Your island has been created!"
+island-teleporting: "<prefix> <gradient:green:blue>Teleporting you to your island..."
+island-not-found: "<prefix> <gradient:red:dark_red>Island not found!"
+island-visit: "<prefix> <gradient:green:blue>Visiting island..."
+island-saved: "<prefix> <gradient:green:blue>Saving island..."
+island-exists: "<prefix> <gradient:red:dark_red>Island already exists!"
+island-home-set: "<prefix> <gradient:green:blue>Home location set!"
+island-locked: "<prefix> <gradient:red:dark_red>Island locked!"
+island-locked-visit: "<prefix> <gradient:red:dark_red>Island is locked! You cannot visit it."
+island-unlocked: "<prefix> <gradient:green:blue>Island unlocked!"
+# SlimeSkyblock Command Messages
+slime-skyblock-help:
+  - "<gray>-- SlimeSkyblock Help --"
+  - "<gradient:green:blue>/ssb reload - Reload the plugin"
+slime-skyblock-reloading: "<prefix> <gradient:green:blue>Reloading plugin..."
+slime-skyblock-reloaded: "<prefix> <gradient:green:blue>Plugin reloaded!"
+# Island Permissions
+break-deny: "<gradient:red:dark_red>You do not have permission to break blocks on this island!"
+build-deny: "<gradient:red:dark_red>You do not have permission to build on this island!"
+lock-deny: "<gradient:red:dark_red>You do not have permission to lock this island!"
+unlock-deny: "<gradient:red:dark_red>You do not have permission to unlock this island!"

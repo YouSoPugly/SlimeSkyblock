@@ -1,0 +1,6 @@
+name: SlimeSkyblock
+version: '1.0-SNAPSHOT'
+main: xyz.pugly.slimeSkyblock.SlimeSkyblock
+api-version: '1.21'
+depend:
+  - SlimeWorldPlugin
