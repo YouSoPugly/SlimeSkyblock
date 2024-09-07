@@ -10,6 +10,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
 import xyz.pugly.slimeSkyblock.events.IslandPermissionCheckEvent;
+import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
+import xyz.pugly.slimeSkyblock.island.permissions.IslandPermissionHolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -187,7 +189,8 @@ public class Island {
     }
 
     public boolean hasPermission(IslandPermission permission, Player player) {
-        IslandPermissionCheckEvent e = new IslandPermissionCheckEvent(player, permission, this, permissions.hasPermission(permission, members.get(player.getUniqueId())) || player.getUniqueId().equals(owner.getUniqueId()));
+        boolean allowed = player.hasPermission("slimeskyblock.admin") || (owner.getUniqueId() == player.getUniqueId()) || permissions.hasPermission(permission, members.getOrDefault(player.getUniqueId(), IslandRoles.GUEST));
+        IslandPermissionCheckEvent e = new IslandPermissionCheckEvent(player, permission, this, allowed);
         Bukkit.getPluginManager().callEvent(e);
         return e.isAllowed();
     }

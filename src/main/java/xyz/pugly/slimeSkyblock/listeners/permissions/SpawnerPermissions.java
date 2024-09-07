@@ -8,7 +8,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import xyz.pugly.slimeSkyblock.events.PluginInitializeEvent;
 import xyz.pugly.slimeSkyblock.island.Island;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
-import xyz.pugly.slimeSkyblock.island.IslandPermission;
+import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.utils.Lang;
 
 public class SpawnerPermissions implements Listener {
@@ -18,11 +18,11 @@ public class SpawnerPermissions implements Listener {
 
     @EventHandler
     public void onPluginInit(PluginInitializeEvent event) {
-        IslandPermission.register("BREAK_SPAWNER");
-        IslandPermission.register("PLACE_SPAWNER");
+        IslandPermission.register("SPAWNER-BREAK");
+        IslandPermission.register("SPAWNER-PLACE");
 
-        breakSpawner = IslandPermission.getByName("BREAK_SPAWNER");
-        placeSpawner = IslandPermission.getByName("PLACE_SPAWNER");
+        breakSpawner = IslandPermission.getByName("SPAWNER-BREAK");
+        placeSpawner = IslandPermission.getByName("SPAWNER-PLACE");
     }
 
     @EventHandler
@@ -33,7 +33,7 @@ public class SpawnerPermissions implements Listener {
         if (island == null) return;
 
         if (e.getBlock().getType().equals(Material.SPAWNER) && !island.hasPermission(breakSpawner, e.getPlayer())) {
-            e.getPlayer().sendMessage(Lang.get(breakSpawner.getName() + "_DENY"));
+            e.getPlayer().sendMessage(Lang.get(breakSpawner.getName() + "-DENY"));
             e.setCancelled(true);
         }
     }
@@ -46,7 +46,7 @@ public class SpawnerPermissions implements Listener {
         if (island == null) return;
 
         if (e.getBlock().getType().equals(Material.SPAWNER) && !island.hasPermission(placeSpawner, e.getPlayer())) {
-            e.getPlayer().sendMessage(Lang.get(placeSpawner.getName() + "_DENY"));
+            e.getPlayer().sendMessage(Lang.get(placeSpawner.getName() + "-DENY"));
             e.setCancelled(true);
         }
     }

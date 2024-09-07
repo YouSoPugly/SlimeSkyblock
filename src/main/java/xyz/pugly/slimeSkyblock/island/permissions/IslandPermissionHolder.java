@@ -1,11 +1,11 @@
-package xyz.pugly.slimeSkyblock.island;
+package xyz.pugly.slimeSkyblock.island.permissions;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
+import xyz.pugly.slimeSkyblock.island.IslandRoles;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class IslandPermissionHolder {
 

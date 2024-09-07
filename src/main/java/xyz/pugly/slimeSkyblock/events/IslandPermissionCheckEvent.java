@@ -5,7 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import xyz.pugly.slimeSkyblock.island.Island;
-import xyz.pugly.slimeSkyblock.island.IslandPermission;
+import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 
 public class IslandPermissionCheckEvent extends Event {
 

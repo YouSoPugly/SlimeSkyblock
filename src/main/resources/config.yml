@@ -5,38 +5,38 @@ language: en-US
 default-permissions:
   # Block Permissions
   BREAK: MEMBER
-  PLACE: MEMBER
+  BUILD: MEMBER
   INTERACT: MEMBER # TODO
-  FARM_TRAMPLE: MEMBER
-  SIGN_EDIT: MEMBER
+  FARM-TRAMPLE: MEMBER
+  SIGN-EDIT: MEMBER
   # Spawner Permissions
-  BREAK_SPAWNER: OFFICER
-  PLACE_SPAWNER: OFFICER
+  SPAWNER-BREAK: OFFICER
+  SPAWNER-PLACE: OFFICER
   # Entity Permissions
-  ITEM_FRAME: MEMBER # TODO
+  ITEM-FRAME: MEMBER
   PAINTING: MEMBER # TODO
   LEASH: MEMBER # TODO
   RIDE: MEMBER # TODO
-  MONSTER_DAMAGE: GUEST # TODO
-  ANIMAL_DAMAGE: GUEST # TODO
-  ANIMAL_BREED: MEMBER # TODO
-  ANIMAL_SHEAR: MEMBER # TODO
-  VILLAGER_TRADE: MEMBER # TODO
-  PICKUP_ITEM: MEMBER # TODO
-  DROP_ITEM: MEMBER # TODO
-  NAME_ENTITY: MEMBER # TODO
+  MONSTER-DAMAGE: GUEST
+  ANIMAL-DAMAGE: GUEST
+  ANIMAL-BREED: MEMBER # ToDO
+  ANIMAL-SHEAR: MEMBER # TODO
+  VILLAGER-TRADE: MEMBER # TODO
+  ITEM-DROP: MEMBER
+  ITEM-PICKUP: MEMBER
+  NAME-ENTITY: MEMBER # TODO
   # Other Permissions
   FISH: GUEST # TODO
-  ENDER_PEARL: MEMBER # TODO
+  ENDER-PEARL: MEMBER # TODO
   USE: MEMBER # TODO
-  FLY: MEMBER # TODO
+  FLY: MEMBER
   # Management Permissions
-  EDIT_PERMS: OWNER # TODO
+  EDIT-PERMS: OWNER # TODO
   RANKUP: MEMBER # TODO
   LOCK: OFFICER
   SETHOME: OFFICER
   KICK: COLEADER # TODO
-  SET_ROLE: COLEADER # TODO
+  SET-ROLE: COLEADER # TODO
   INVITE: OFFICER # TODO
 # Custom Cobblestone Generators
 custom-generator: true
@@ -47,16 +47,16 @@ generator-tiers:
   0:
     cobblestone: 0.5
     stone: 0.3
-    coal_ore: 0.15
-    iron_ore: 0.05
+    coal-ore: 0.15
+    iron-ore: 0.05
   1:
     cobblestone: 0.45
     stone: 0.25
-    coal_ore: 0.2
-    iron_ore: 0.1
+    coal-ore: 0.2
+    iron-ore: 0.1
   2:
     cobblestone: 0.3
     stone: 0.2
-    coal_ore: 0.3
-    iron_ore: 0.15
-    gold_ore: 0.05
+    coal-ore: 0.3
+    iron-ore: 0.15
+    gold-ore: 0.05

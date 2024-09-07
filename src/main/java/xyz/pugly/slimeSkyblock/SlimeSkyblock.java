@@ -8,15 +8,19 @@ import xyz.pugly.slimeSkyblock.commands.IslandCommand;
 import xyz.pugly.slimeSkyblock.commands.SlimeSkyblockCommand;
 import xyz.pugly.slimeSkyblock.events.PluginInitializeEvent;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
-import xyz.pugly.slimeSkyblock.island.IslandPermission;
+import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.listeners.BlockBreak;
 import xyz.pugly.slimeSkyblock.listeners.BlockForm;
 import xyz.pugly.slimeSkyblock.listeners.BlockPlace;
 import xyz.pugly.slimeSkyblock.listeners.PlayerJoin;
 import xyz.pugly.slimeSkyblock.listeners.WorldUnload;
+import xyz.pugly.slimeSkyblock.listeners.permissions.AttackPermissions;
 import xyz.pugly.slimeSkyblock.listeners.permissions.BreakPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.BuildPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.CropTramplePermission;
+import xyz.pugly.slimeSkyblock.listeners.permissions.FlyPermission;
+import xyz.pugly.slimeSkyblock.listeners.permissions.ItemFramePermission;
+import xyz.pugly.slimeSkyblock.listeners.permissions.ItemPermissions;
 import xyz.pugly.slimeSkyblock.listeners.permissions.SignPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.SpawnerPermissions;
 import xyz.pugly.slimeSkyblock.utils.Lang;
@@ -50,10 +54,6 @@ public final class SlimeSkyblock extends JavaPlugin {
         CommandAPI.registerCommand(IslandCommand.class);
         CommandAPI.registerCommand(SlimeSkyblockCommand.class);
 
-        // Plugin startup logic
-        IslandManager.instance();
-        Lang.load(getConfig().getString("language"));
-
         // Listeners
         islandPermissions();
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
@@ -66,6 +66,10 @@ public final class SlimeSkyblock extends JavaPlugin {
         // Send plugin init event
         PluginInitializeEvent event = new PluginInitializeEvent(this);
         getServer().getPluginManager().callEvent(event);
+
+        // Plugin startup logic
+        IslandManager.instance();
+        Lang.load(getConfig().getString("language"));
 
         getLogger().info("SlimeSkyblock has been enabled!");
     }
@@ -102,9 +106,13 @@ public final class SlimeSkyblock extends JavaPlugin {
     }
 
     private void islandPermissions() {
+        getServer().getPluginManager().registerEvents(new AttackPermissions(), this);
         getServer().getPluginManager().registerEvents(new BreakPermission(), this);
         getServer().getPluginManager().registerEvents(new BuildPermission(), this);
         getServer().getPluginManager().registerEvents(new CropTramplePermission(), this);
+        getServer().getPluginManager().registerEvents(new FlyPermission(), this);
+        getServer().getPluginManager().registerEvents(new ItemFramePermission(), this);
+        getServer().getPluginManager().registerEvents(new ItemPermissions(), this);
         getServer().getPluginManager().registerEvents(new SignPermission(), this);
         getServer().getPluginManager().registerEvents(new SpawnerPermissions(), this);
 

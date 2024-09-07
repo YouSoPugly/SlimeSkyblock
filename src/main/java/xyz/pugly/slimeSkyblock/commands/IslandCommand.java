@@ -8,7 +8,7 @@ import dev.jorel.commandapi.annotations.Subcommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
-import xyz.pugly.slimeSkyblock.island.IslandPermission;
+import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.utils.Lang;
 
 @Command("island")
@@ -56,7 +56,7 @@ public class IslandCommand {
 
         // Teleport to island
         sender.sendMessage(Lang.get("island-teleporting"));
-        im.getIsland(((Player) sender).getLocation()).teleport((Player) sender);
+        im.getIsland(((Player) sender).getUniqueId()).teleport((Player) sender);
     }
 
     @Subcommand("lock")

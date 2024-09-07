@@ -1,9 +1,8 @@
-package xyz.pugly.slimeSkyblock.island;
+package xyz.pugly.slimeSkyblock.island.permissions;
 
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class IslandPermission {
 

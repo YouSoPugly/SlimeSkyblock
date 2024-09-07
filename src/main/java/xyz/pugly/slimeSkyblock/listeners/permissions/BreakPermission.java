@@ -6,7 +6,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import xyz.pugly.slimeSkyblock.events.PluginInitializeEvent;
 import xyz.pugly.slimeSkyblock.island.Island;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
-import xyz.pugly.slimeSkyblock.island.IslandPermission;
+import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.utils.Lang;
 
 public class BreakPermission implements Listener {
@@ -27,7 +27,7 @@ public class BreakPermission implements Listener {
         }
 
         if (!is.hasPermission(permission, event.getPlayer())) {
-            event.getPlayer().sendMessage(Lang.get(permission.getName() + "_DENY"));
+            event.getPlayer().sendMessage(Lang.get(permission.getName() + "-DENY"));
             event.setCancelled(true);
         }
     }

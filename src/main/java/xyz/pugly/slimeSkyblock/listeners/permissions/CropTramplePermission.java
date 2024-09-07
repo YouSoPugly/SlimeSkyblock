@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import xyz.pugly.slimeSkyblock.events.PluginInitializeEvent;
 import xyz.pugly.slimeSkyblock.island.Island;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
-import xyz.pugly.slimeSkyblock.island.IslandPermission;
+import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.utils.Lang;
 
 public class CropTramplePermission implements Listener {
@@ -17,8 +17,8 @@ public class CropTramplePermission implements Listener {
 
     @EventHandler
     public void onPluginInit(PluginInitializeEvent event) {
-        IslandPermission.register("CROP_TRAMPLE");
-        permission = IslandPermission.getByName("CROP_TRAMPLE");
+        IslandPermission.register("CROP-TRAMPLE");
+        permission = IslandPermission.getByName("CROP-TRAMPLE");
     }
 
     @EventHandler
@@ -37,7 +37,7 @@ public class CropTramplePermission implements Listener {
             return;
 
         if (!is.hasPermission(permission, event.getPlayer())) {
-            event.getPlayer().sendMessage(Lang.get(permission.getName() + "_DENY"));
+            event.getPlayer().sendMessage(Lang.get(permission.getName() + "-DENY"));
             event.setCancelled(true);
         }
     }
