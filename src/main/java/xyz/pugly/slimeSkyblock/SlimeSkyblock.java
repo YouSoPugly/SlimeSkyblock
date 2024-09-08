@@ -19,10 +19,14 @@ import xyz.pugly.slimeSkyblock.listeners.permissions.BreakPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.BuildPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.CropTramplePermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.FlyPermission;
+import xyz.pugly.slimeSkyblock.listeners.permissions.InteractPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.ItemFramePermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.ItemPermissions;
+import xyz.pugly.slimeSkyblock.listeners.permissions.LeashPermission;
+import xyz.pugly.slimeSkyblock.listeners.permissions.NameEntityPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.SignPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.SpawnerPermissions;
+import xyz.pugly.slimeSkyblock.listeners.permissions.UsePermissions;
 import xyz.pugly.slimeSkyblock.utils.Lang;
 
 import java.io.File;
@@ -111,10 +115,14 @@ public final class SlimeSkyblock extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BuildPermission(), this);
         getServer().getPluginManager().registerEvents(new CropTramplePermission(), this);
         getServer().getPluginManager().registerEvents(new FlyPermission(), this);
+        getServer().getPluginManager().registerEvents(new InteractPermission(), this);
         getServer().getPluginManager().registerEvents(new ItemFramePermission(), this);
         getServer().getPluginManager().registerEvents(new ItemPermissions(), this);
+        getServer().getPluginManager().registerEvents(new LeashPermission(), this);
+        getServer().getPluginManager().registerEvents(new NameEntityPermission(), this);
         getServer().getPluginManager().registerEvents(new SignPermission(), this);
         getServer().getPluginManager().registerEvents(new SpawnerPermissions(), this);
+        getServer().getPluginManager().registerEvents(new UsePermissions(), this);
 
         IslandPermission.register("LOCK");
         IslandPermission.register("SETHOME");
