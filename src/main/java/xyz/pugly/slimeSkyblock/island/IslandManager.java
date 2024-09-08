@@ -39,7 +39,7 @@ public class IslandManager {
     private static AdvancedSlimePaperAPI asp = AdvancedSlimePaperAPI.instance();
 
     private HashMap<UUID, Island> islands;
-    private SlimeLoader loader;
+    private final SlimeLoader loader;
 
     private final Queue loaded = new LinkedList();
 
@@ -124,7 +124,7 @@ public class IslandManager {
 
     public void loadIsland(UUID id) {
 
-        if (islands.get(id).loaded) {
+        if (islands.get(id).getLoaded()) {
             SlimeSkyblock.info("Island with id " + id + " is already loaded.");
             return;
         }

@@ -19,17 +19,32 @@ public class IslandPermissionHolder {
             }
             permissions.put(permission, IslandRoles.valueOf(perms.getString(perm)));
         }
+
+        fillDefaults();
     }
 
     public IslandPermissionHolder() {
+        fillDefaults();
+    }
+
+    private void fillDefaults() {
         ConfigurationSection cs = SlimeSkyblock.get().getConfig().getConfigurationSection("default-permissions");
 
         for (String perm : cs.getKeys(false)) {
+            if (permissions.containsKey(perm)) {
+                continue;
+            }
             IslandPermission permission = IslandPermission.getByName(perm);
             if (permission == null) {
                 continue;
             }
             permissions.put(permission, IslandRoles.valueOf(cs.getString(perm)));
+        }
+
+        for (String key : IslandPermission.getPermissions().keySet()) {
+            if (!permissions.containsKey(key)) {
+                permissions.put(IslandPermission.getByName(key), IslandRoles.OWNER);
+            }
         }
     }
 

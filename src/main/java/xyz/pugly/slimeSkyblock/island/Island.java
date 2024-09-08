@@ -21,11 +21,11 @@ import java.util.UUID;
 
 public class Island {
 
-    private UUID id;
+    private final UUID id;
     private SlimeWorld world;
-    boolean loaded = false;
+    private boolean loaded = false;
+    private final OfflinePlayer owner;
 
-    private OfflinePlayer owner;
     private int xp = 0;
     private int hoppers = 0;
     private boolean isPrivate = false;
@@ -303,5 +303,9 @@ public class Island {
 
     public SlimeWorld getWorld() {
         return world;
+    }
+
+    public boolean getLoaded() {
+        return loaded;
     }
 }

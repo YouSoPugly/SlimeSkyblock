@@ -1,8 +1,9 @@
 Minecraft skyblock plugin using Advanced Slime Paper.
 
-## TODO (As of 9/7/24)
+## TODO (As of 9/8/24)
 - [ ] Finish island permissions
 - [ ] Add island flags
+- [ ] Add missing island commands
 - [ ] Add island menu (GUI)
 - [ ] Add island level (PAPI)
 - [ ] Add island warps

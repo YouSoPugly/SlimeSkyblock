@@ -2,6 +2,7 @@ language: en-US
 # Default Island Permissions
 # Roles can be GUEST, MEMBER, OFFICER, COLEADER or OWNER
 # Any permission omitted will default to OWNER
+# Permission messages can be found in the language file under "{permission}-deny"
 default-permissions:
   # Block Permissions
   BREAK: MEMBER

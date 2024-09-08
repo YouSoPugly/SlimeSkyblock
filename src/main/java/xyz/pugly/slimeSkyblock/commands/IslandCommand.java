@@ -41,7 +41,7 @@ public class IslandCommand {
         sender.sendMessage(Lang.get("island-created"));
     }
 
-    @Subcommand({"go", "tp", "home"})
+    @Subcommand({"go", "home"})
     @Permission("slimeskyblock.island.home")
     public static void home(CommandSender sender) {
         if (!(sender instanceof Player))
