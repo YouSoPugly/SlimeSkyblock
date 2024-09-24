@@ -10,7 +10,9 @@
 ############################################################
 prefix: "<rainbow>SKYBLOCK ⟫</rainbow>"
 no-permission: "<gradient:red:dark_red>You do not have permission to do this!"
+############################################################
 # Island Command Messages
+############################################################
 island-help:
   - "<gray>-- Island Help --"
   - "<gradient:green:blue>/island create - Create an island"
@@ -30,13 +32,17 @@ island-home-set: "<prefix> <gradient:green:blue>Home location set!"
 island-locked: "<prefix> <gradient:red:dark_red>Island locked!"
 island-locked-visit: "<prefix> <gradient:red:dark_red>Island is locked! You cannot visit it."
 island-unlocked: "<prefix> <gradient:green:blue>Island unlocked!"
+############################################################
 # SlimeSkyblock Command Messages
+############################################################
 slime-skyblock-help:
   - "<gray>-- SlimeSkyblock Help --"
   - "<gradient:green:blue>/ssb reload - Reload the plugin"
 slime-skyblock-reloading: "<prefix> <gradient:green:blue>Reloading plugin..."
 slime-skyblock-reloaded: "<prefix> <gradient:green:blue>Plugin reloaded!"
+############################################################
 # Island Permissions
+############################################################
 break-deny: "<gradient:red:dark_red>You do not have permission to break blocks on this island!"
 build-deny: "<gradient:red:dark_red>You do not have permission to build on this island!"
 lock-deny: "<gradient:red:dark_red>You do not have permission to lock this island!"

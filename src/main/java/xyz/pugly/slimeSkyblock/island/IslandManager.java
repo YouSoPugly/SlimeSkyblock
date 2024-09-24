@@ -99,6 +99,11 @@ public class IslandManager {
     }
 
     public Island getIsland(World world) {
+        try {
+            UUID.fromString(world.getName());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
         return islands.get(UUID.fromString(world.getName()));
     }
 

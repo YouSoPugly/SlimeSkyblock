@@ -5,8 +5,13 @@ import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
+import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.pugly.slimeSkyblock.island.Island;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.utils.Lang;
@@ -14,8 +19,6 @@ import xyz.pugly.slimeSkyblock.utils.Lang;
 @Command("island")
 @Alias("is")
 public class IslandCommand {
-
-    //TODO deal with island permissions :sob:
 
     @Default
     public static void island(CommandSender sender) {
@@ -126,6 +129,163 @@ public class IslandCommand {
         // Set home
         im.getIsland(((Player) sender).getLocation()).setHome(((Player) sender).getLocation());
         sender.sendMessage(Lang.get("island-home-set"));
+    }
+
+    @Subcommand({"invite", "add"})
+    @Permission("slimeskyblock.island.invite")
+    public static void invite(Player player, @APlayerArgument OfflinePlayer target) {
+        Island is = IslandManager.instance().getIsland(player.getLocation());
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
+            return;
+        }
+
+        if (!is.hasPermission(IslandPermission.getByName("INVITE"), player)) {
+            player.sendMessage(Lang.get("invite-deny"));
+            return;
+        }
+
+        is.addInvite(target.getUniqueId());
+        if (target.hasPlayedBefore() && target.getPlayer().isOnline())
+            target.getPlayer().sendMessage(Lang.get("island-invited", is));
+    }
+
+    @Subcommand({"uninvite"})
+    @Permission("slimeskyblock.island.invite")
+    public static void uninvite(Player player, @APlayerArgument OfflinePlayer target) {
+        Island is = IslandManager.instance().getIsland(player.getLocation());
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
+            return;
+        }
+
+        if (!is.hasPermission(IslandPermission.getByName("INVITE"), player)) {
+            player.sendMessage(Lang.get("uninvite-deny"));
+            return;
+        }
+
+        is.removeInvite(target.getUniqueId());
+        if (target.hasPlayedBefore() && target.getPlayer().isOnline())
+            target.getPlayer().sendMessage(Lang.get("island-uninvited", is));
+    }
+
+    @Subcommand("join")
+    @Permission("slimeskyblock.island.join")
+    public static void join(Player player, @APlayerArgument OfflinePlayer target) {
+        Island is = IslandManager.instance().getIsland(target.getUniqueId());
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
+            return;
+        }
+
+        if (!is.hasInvite(player.getUniqueId())) {
+            player.sendMessage(Lang.get("join-deny"));
+            return;
+        }
+
+        is.addMember(player.getUniqueId());
+        player.sendMessage(Lang.get("island-joined", is));
+    }
+
+    @Subcommand("promote")
+    @Permission("slimeskyblock.island.promote")
+    public static void promote(Player player, @APlayerArgument OfflinePlayer target) {
+        Island is = IslandManager.instance().getIsland(player.getLocation());
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
+            return;
+        }
+
+        if (!is.hasPermission(IslandPermission.getByName("PROMOTE"), player)) {
+            player.sendMessage(Lang.get("promote-deny"));
+            return;
+        }
+
+        if (target.getPlayer() == null || !is.isMember(target.getPlayer())) {
+            player.sendMessage(Lang.get("promote-not-member"));
+            return;
+        }
+
+        if (is.promoteMember(target.getUniqueId(), player)) {
+            player.sendMessage(Lang.get("promote-success", target));
+        } else {
+            player.sendMessage(Lang.get("promote-fail"));
+        }
+    }
+
+    @Subcommand("demote")
+    @Permission("slimeskyblock.island.demote")
+    public static void demote(Player player, @APlayerArgument OfflinePlayer target) {
+        Island is = IslandManager.instance().getIsland(player.getLocation());
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
+            return;
+        }
+
+        if (!is.hasPermission(IslandPermission.getByName("DEMOTE"), player)) {
+            player.sendMessage(Lang.get("demote-deny"));
+            return;
+        }
+
+        if (target.getPlayer() == null || !is.isMember(target.getPlayer())) {
+            player.sendMessage(Lang.get("demote-not-member"));
+            return;
+        }
+
+        if (is.demoteMember(target.getUniqueId(), player)) {
+            player.sendMessage(Lang.get("demote-success", target));
+        } else {
+            player.sendMessage(Lang.get("demote-fail"));
+        }
+    }
+
+    @Subcommand("kick")
+    @Permission("slimeskyblock.island.kick")
+    public static void kick(Player player, @APlayerArgument OfflinePlayer target) {
+        Island is = IslandManager.instance().getIsland(player.getLocation());
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
+            return;
+        }
+
+        if (!is.hasPermission(IslandPermission.getByName("KICK"), player)) {
+            player.sendMessage(Lang.get("kick-deny"));
+            return;
+        }
+
+        if (target.getPlayer() == null || !is.isMember(target.getPlayer())) {
+            player.sendMessage(Lang.get("kick-not-member"));
+            return;
+        }
+
+        if (is.kick(target.getUniqueId(), player)) {
+            player.sendMessage(Lang.get("kick-success", target));
+        } else {
+            player.sendMessage(Lang.get("kick-fail"));
+        }
+    }
+
+    @Subcommand("leave")
+    @Permission("slimeskyblock.island.leave")
+    public static void leave(Player player) {
+        Island is = IslandManager.instance().getIsland(player.getLocation());
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
+            return;
+        }
+
+        if (!is.isMember(player)) {
+            player.sendMessage(Lang.get("leave-not-member"));
+            return;
+        }
+
+        if (is.getOwner().equals(player.getUniqueId())) {
+            player.sendMessage(Lang.get("leave-owner"));
+            return;
+        }
+
+        is.removeMember(player.getUniqueId());
+        player.sendMessage(Lang.get("island-left"));
     }
 
     @Subcommand("help")

@@ -188,11 +188,39 @@ public class Island {
         Bukkit.getWorld(id.toString()).setSpawnLocation(l);
     }
 
+    public boolean promoteMember(UUID member, Player player) {
+        if (members.get(member).getLevel() < members.get(player.getUniqueId()).getLevel()) {
+            members.put(member, IslandRoles.getRoleByLevel(members.get(member).getLevel() + 1));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean demoteMember(UUID member, Player player) {
+        if (members.get(member).getLevel() < members.get(player.getUniqueId()).getLevel()) {
+            members.put(member, IslandRoles.getRoleByLevel(members.get(member).getLevel() - 1));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean kick(UUID member, Player player) {
+        if (members.get(member).getLevel() < members.get(player.getUniqueId()).getLevel()) {
+            members.remove(member);
+            return true;
+        }
+        return false;
+    }
+
     public boolean hasPermission(IslandPermission permission, Player player) {
         boolean allowed = player.hasPermission("slimeskyblock.admin") || (owner.getUniqueId() == player.getUniqueId()) || permissions.hasPermission(permission, members.getOrDefault(player.getUniqueId(), IslandRoles.GUEST));
         IslandPermissionCheckEvent e = new IslandPermissionCheckEvent(player, permission, this, allowed);
         Bukkit.getPluginManager().callEvent(e);
         return e.isAllowed();
+    }
+
+    public boolean hasInvite(UUID player) {
+        return invites.contains(player);
     }
 
     // Getters and setters

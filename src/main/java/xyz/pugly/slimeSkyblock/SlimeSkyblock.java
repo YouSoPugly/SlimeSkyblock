@@ -68,7 +68,7 @@ public final class SlimeSkyblock extends JavaPlugin {
         getServer().getPluginManager().registerEvents(blockForm, this);
 
         // Send plugin init event
-        PluginInitializeEvent event = new PluginInitializeEvent(this);
+        PluginInitializeEvent event = new PluginInitializeEvent();
         getServer().getPluginManager().callEvent(event);
 
         // Plugin startup logic

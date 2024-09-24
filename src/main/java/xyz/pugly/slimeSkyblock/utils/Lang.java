@@ -3,6 +3,7 @@ package xyz.pugly.slimeSkyblock.utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import xyz.pugly.slimeSkyblock.island.Island;
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
@@ -77,5 +78,10 @@ public class Lang {
     public static Component get(String key, Island island) {
         return mm.deserialize(lang.get(key),
                 Placeholder.component("gen-tier", Component.text(island.getGeneratorTier())));
+    }
+
+    public static Component get(String key, OfflinePlayer player) {
+        return mm.deserialize(lang.get(key),
+                Placeholder.component("player", Component.text(player.getName())));
     }
 }

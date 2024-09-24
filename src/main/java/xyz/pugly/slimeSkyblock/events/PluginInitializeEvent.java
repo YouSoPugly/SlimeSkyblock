@@ -9,8 +9,6 @@ public class PluginInitializeEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private SlimeSkyblock plugin;
-
     @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;
@@ -20,12 +18,7 @@ public class PluginInitializeEvent extends Event {
         return HANDLERS;
     }
 
-    public PluginInitializeEvent(SlimeSkyblock plugin) {
+    public PluginInitializeEvent() {
         super(false);
-        this.plugin = plugin;
-    }
-
-    public SlimeSkyblock getPlugin() {
-        return plugin;
     }
 }
