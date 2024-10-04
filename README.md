@@ -1,8 +1,10 @@
 Minecraft skyblock plugin using Advanced Slime Paper.
 
-## TODO (As of 9/8/24)
+## TODO (As of 10/4/24)
+- [x] Add island permissions
 - [ ] Finish island permissions
-- [ ] Add island flags
+- [x] Add island flags
+- [ ] Finish island flags
 - [ ] Add missing island commands
 - [ ] Add island menu (GUI)
 - [ ] Add island level (PAPI)
@@ -13,7 +15,7 @@ Minecraft skyblock plugin using Advanced Slime Paper.
     - [ ] Add island worth leaderboard (GUI & PAPI) 
     - [ ] Add WildStacker integration
 - [ ] Add missing text to en-US.yml
-- [ ] Add all permissions
+- [ ] Add all permissions to the list below
 
 ## Permissions
 - 'slimeskyblock.admin' - Allows the player to use the /ssb command

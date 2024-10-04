@@ -14,6 +14,7 @@ import xyz.pugly.slimeSkyblock.listeners.BlockForm;
 import xyz.pugly.slimeSkyblock.listeners.BlockPlace;
 import xyz.pugly.slimeSkyblock.listeners.PlayerJoin;
 import xyz.pugly.slimeSkyblock.listeners.WorldUnload;
+import xyz.pugly.slimeSkyblock.listeners.flags.SpawnFlags;
 import xyz.pugly.slimeSkyblock.listeners.permissions.AttackPermissions;
 import xyz.pugly.slimeSkyblock.listeners.permissions.BreakPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.BuildPermission;
@@ -60,6 +61,7 @@ public final class SlimeSkyblock extends JavaPlugin {
 
         // Listeners
         islandPermissions();
+        islandFlags();
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new WorldUnload(), this);
         getServer().getPluginManager().registerEvents(new BlockPlace(), this);
@@ -107,6 +109,10 @@ public final class SlimeSkyblock extends JavaPlugin {
         reloadConfig();
         Lang.load(getConfig().getString("language"));
         blockForm.reload(getConfig().getBoolean("custom-generator"), getConfig().getConfigurationSection("generator-tiers"));
+    }
+
+    private void islandFlags() {
+        getServer().getPluginManager().registerEvents(new SpawnFlags(), this);
     }
 
     private void islandPermissions() {

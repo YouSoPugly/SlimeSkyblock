@@ -288,6 +288,18 @@ public class IslandCommand {
         player.sendMessage(Lang.get("island-left"));
     }
 
+    @Subcommand({"flag", "flags"})
+    @Permission("slimeskyblock.island.flag")
+    public static void flag(CommandSender sender) {
+        sender.sendMessage(Lang.get("flag-help"));
+    }
+
+    @Subcommand({"perms", "permissions", "perm", "permission"})
+    @Permission("slimeskyblock.island.permission")
+    public static void permission(CommandSender sender) {
+        sender.sendMessage(Lang.get("permission-help"));
+    }
+
     @Subcommand("help")
     public static void help(CommandSender sender) {
         island(sender);

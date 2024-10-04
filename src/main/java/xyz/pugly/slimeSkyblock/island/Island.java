@@ -10,6 +10,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
 import xyz.pugly.slimeSkyblock.events.IslandPermissionCheckEvent;
+import xyz.pugly.slimeSkyblock.island.flags.IslandFlag;
+import xyz.pugly.slimeSkyblock.island.flags.IslandFlagHolder;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermissionHolder;
 
@@ -35,8 +37,8 @@ public class Island {
     private HashSet<UUID> invites = new HashSet<>();
     private HashSet<UUID> bans = new HashSet<>();
 
-
     private IslandPermissionHolder permissions;
+    private IslandFlagHolder flags;
 
     // Constructor
 
@@ -44,6 +46,7 @@ public class Island {
         this.id = id;
         this.owner = owner;
         permissions = new IslandPermissionHolder();
+        flags = new IslandFlagHolder();
     }
 
     public Island(UUID id, YamlConfiguration islandInfo) {
@@ -77,6 +80,11 @@ public class Island {
             permissions = new IslandPermissionHolder(islandInfo.getConfigurationSection("permissions"));
         else
             permissions = new IslandPermissionHolder();
+
+        if (islandInfo.contains("flags"))
+            flags = new IslandFlagHolder(islandInfo.getConfigurationSection("flags"));
+        else
+            flags = new IslandFlagHolder();
     }
 
     // World management
@@ -133,6 +141,7 @@ public class Island {
         islandInfo.set("bans", banStrings);
 
         islandInfo.set("permissions", permissions.serialize());
+        islandInfo.set("flags", flags.serialize());
 
         try {
             islandInfo.save(new File(islandFolder, id.toString() + ".yml"));
@@ -217,6 +226,10 @@ public class Island {
         IslandPermissionCheckEvent e = new IslandPermissionCheckEvent(player, permission, this, allowed);
         Bukkit.getPluginManager().callEvent(e);
         return e.isAllowed();
+    }
+
+    public boolean checkFlag(IslandFlag flag) {
+        return flags.checkFlag(flag);
     }
 
     public boolean hasInvite(UUID player) {
