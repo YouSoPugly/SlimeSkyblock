@@ -11,6 +11,7 @@ public class IslandMainMenu extends ConfigurableGui {
         super(player, "island-main-menu");
     }
 
+    // TODO: Implement the GUI
     @Override
     public void onOpen(InventoryOpenEvent event) {
 

@@ -6,10 +6,12 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import mc.obliviate.inventory.InventoryAPI;
 import mc.obliviate.inventory.configurable.ConfigurableGuiCache;
 import mc.obliviate.inventory.configurable.GuiConfigurationTable;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.pugly.slimeSkyblock.commands.IslandCommand;
 import xyz.pugly.slimeSkyblock.commands.SlimeSkyblockCommand;
 import xyz.pugly.slimeSkyblock.events.PluginInitializeEvent;
+import xyz.pugly.slimeSkyblock.hooks.PAPIExpansion;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.listeners.BlockBreak;
@@ -38,7 +40,10 @@ import java.io.File;
 public final class SlimeSkyblock extends JavaPlugin {
 
     private static SlimeSkyblock instance;
+
     private BlockForm blockForm;
+
+    private static boolean PAPI = false;
 
     @Override
     public void onEnable() {
@@ -55,6 +60,12 @@ public final class SlimeSkyblock extends JavaPlugin {
             AdvancedSlimePaperAPI api = AdvancedSlimePaperAPI.instance();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        // PAPI
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            PAPI = true;
+            new PAPIExpansion(this).register();
         }
 
         // Obliviate GUI
@@ -140,5 +151,9 @@ public final class SlimeSkyblock extends JavaPlugin {
 
         IslandPermission.register("LOCK");
         IslandPermission.register("SETHOME");
+    }
+
+    public boolean usePAPI() {
+        return PAPI;
     }
 }

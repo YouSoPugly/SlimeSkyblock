@@ -4,3 +4,5 @@ main: xyz.pugly.slimeSkyblock.SlimeSkyblock
 api-version: '1.21'
 depend:
   - SlimeWorldPlugin
+softdepend:
+  - PlaceholderAPI

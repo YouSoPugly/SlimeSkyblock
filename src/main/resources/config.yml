@@ -4,8 +4,7 @@
 # This file is used to configure the plugin.
 # You can change the values to whatever you want.
 # Do not change the keys (the text before the = sign) as they are used to identify the values in the plugin.
-# Use minimessage formatting to format the text. You can find more information about minimessage
-# formatting at https://docs.adventure.kyori.net/minimessage.html
+# Use typical minecraft color formatting codes (&) to format text in GUI menus.
 language: en-US
 per-player-islands: true
 can-join-multiple: true
@@ -103,6 +102,9 @@ generator-tiers:
 ############################################################
 # Island Menus
 ############################################################
+# Only & codes are supported for color formatting.
+# Use {level}, {size}, {members} and {role} to display island information.
+# Use PAPI placeholders for more advanced information.
 # The menu used when inside an island.
 island-main-menu:
   title: '&6&lIsland Menu'
