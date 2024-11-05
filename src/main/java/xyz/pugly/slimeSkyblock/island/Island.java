@@ -14,11 +14,14 @@ import xyz.pugly.slimeSkyblock.island.flags.IslandFlag;
 import xyz.pugly.slimeSkyblock.island.flags.IslandFlagHolder;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermissionHolder;
+import xyz.pugly.slimeSkyblock.island.savers.YMLSaver;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.UUID;
 
 public class Island {
@@ -40,9 +43,11 @@ public class Island {
     private IslandPermissionHolder permissions;
     private IslandFlagHolder flags;
 
+    private final Queue<Player> teleportQueue = new LinkedList<>();
+
     // Constructor
 
-    public Island(UUID id, Player owner) {
+    public Island(UUID id, OfflinePlayer owner) {
         this.id = id;
         this.owner = owner;
         permissions = new IslandPermissionHolder();
@@ -95,6 +100,11 @@ public class Island {
         loaded = true;
         this.world = world;
         SlimeSkyblock.info("Loaded island for " + owner.getName());
+
+        for (Player p : teleportQueue) {
+            if (p.isOnline())
+                teleport(p);
+        }
     }
 
     public void cloneWorld(SlimeWorld world) {
@@ -103,78 +113,6 @@ public class Island {
             load(cloned);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    // Saving
-
-    public void saveData() {
-        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/islands");
-        if (!islandFolder.exists()) {
-            islandFolder.mkdirs();
-        }
-
-        YamlConfiguration islandInfo = new YamlConfiguration();
-
-        islandInfo.set("owner", owner.getUniqueId().toString());
-        islandInfo.set("xp", xp);
-        islandInfo.set("hoppers", hoppers);
-        islandInfo.set("private", isPrivate);
-        islandInfo.set("generatorTier", generatorTier);
-
-        YamlConfiguration members = new YamlConfiguration();
-        for (UUID member : this.members.keySet()) {
-            members.set(member.toString(), this.members.get(member).name());
-        }
-        islandInfo.set("members", members);
-
-        HashSet<String> inviteStrings = new HashSet<>();
-        for (UUID invite : invites) {
-            inviteStrings.add(invite.toString());
-        }
-        islandInfo.set("invites", inviteStrings);
-
-        HashSet<String> banStrings = new HashSet<>();
-        for (UUID ban : bans) {
-            banStrings.add(ban.toString());
-        }
-        islandInfo.set("bans", banStrings);
-
-        islandInfo.set("permissions", permissions.serialize());
-        islandInfo.set("flags", flags.serialize());
-
-        try {
-            islandInfo.save(new File(islandFolder, id.toString() + ".yml"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void save() {
-        saveData();
-
-        if (!loaded)
-            return;
-
-        Bukkit.getScheduler().runTaskAsynchronously(SlimeSkyblock.get(), () -> {
-            try {
-                AdvancedSlimePaperAPI.instance().saveWorld(world);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    public void forceSave() {
-
-        saveData();
-
-        if (loaded) {
-            try {
-                AdvancedSlimePaperAPI.instance().saveWorld(world);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
@@ -187,7 +125,12 @@ public class Island {
     // Actual Island Stuff
 
     public void teleport(Player player) {
-        player.teleport(Bukkit.getWorld(id.toString()).getSpawnLocation());
+        if (!loaded) {
+            IslandManager.instance().loadIsland(id);
+            teleportQueue.add(player);
+        } else {
+            player.teleport(Bukkit.getWorld(id.toString()).getSpawnLocation());
+        }
     }
 
     public void setHome(Location l) {
@@ -298,6 +241,10 @@ public class Island {
         return owner;
     }
 
+    public IslandRoles getRole(UUID member) {
+        return members.get(member);
+    }
+
     public int getXp() {
         return xp;
     }
@@ -348,5 +295,13 @@ public class Island {
 
     public boolean getLoaded() {
         return loaded;
+    }
+
+    public IslandPermissionHolder getPermissions() {
+        return permissions;
+    }
+
+    public IslandFlagHolder getFlags() {
+        return flags;
     }
 }

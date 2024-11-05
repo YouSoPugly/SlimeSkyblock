@@ -43,6 +43,7 @@ slime-skyblock-reloaded: "<prefix> <gradient:green:blue>Plugin reloaded!"
 ############################################################
 # Island Permissions
 ############################################################
+default-deny: "<gradient:red:dark_red>You do not have permission to do this!"
 break-deny: "<gradient:red:dark_red>You do not have permission to break blocks on this island!"
 build-deny: "<gradient:red:dark_red>You do not have permission to build on this island!"
 lock-deny: "<gradient:red:dark_red>You do not have permission to lock this island!"

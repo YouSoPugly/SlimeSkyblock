@@ -1,4 +1,17 @@
+############################################################
+# Slime Skyblock Configuration
+############################################################
+# This file is used to configure the plugin.
+# You can change the values to whatever you want.
+# Do not change the keys (the text before the = sign) as they are used to identify the values in the plugin.
+# Use minimessage formatting to format the text. You can find more information about minimessage
+# formatting at https://docs.adventure.kyori.net/minimessage.html
 language: en-US
+per-player-islands: true
+can-join-multiple: true
+############################################################
+# Island Permissions
+############################################################
 # Default Island Permissions
 # Roles can be GUEST, MEMBER, OFFICER, COLEADER or OWNER
 # Any permission omitted will default to OWNER
@@ -39,6 +52,9 @@ default-permissions:
   KICK: COLEADER # TODO
   SET-ROLE: COLEADER # TODO
   INVITE: OFFICER # TODO
+############################################################
+# Island Flags (Settings)
+############################################################
 # Default Island Flags
 # Flags can be true or false
 # Any flag omitted will default to false
@@ -59,6 +75,9 @@ default-flags:
   ALWAYS-DUSK: false # TODO
   CLEAR-WEATHER: false # TODO
   RAINY-WEATHER: false # TODO
+############################################################
+# Island Upgrades
+############################################################
 # Custom Cobblestone Generators
 custom-generator: true
 # 0 is the default tier.
@@ -81,3 +100,59 @@ generator-tiers:
     coal-ore: 0.3
     iron-ore: 0.15
     gold-ore: 0.05
+############################################################
+# Island Menus
+############################################################
+# The menu used when inside an island.
+island-main-menu:
+  title: '&6&lIsland Menu'
+  rows: 4
+  icons:
+    filler:
+      material: GREY_STAINED_GLASS_PANE
+      name: '&8'
+      slot: 1,2, 6,7, 9-11, 15-17, 19-21, 23-25
+# The menu used when outside an island.
+# Remove this section to use the same menu as the island-main-menu.
+island-exterior-menu:
+  title: '&6&lIsland Menu'
+  rows: 2
+  icons:
+    filler:
+      material: GREY_STAINED_GLASS_PANE
+      name: '&8'
+      slot: 1,2, 6,7, 9-11, 15-17
+    home:
+      material: GRASS_BLOCK
+      name: '&b&lTravel To Island'
+      lore:
+        - '&bTo set your island home location:'
+        - '&bUse /is sethome.'
+        -
+        - '&7Click to teleport to your island.'
+      slot: 0
+    stats:
+      material: EMERALD
+      name: '&b&lStats'
+      slot: 3
+      lore:
+        - '&bIsland Level: &f{level}'
+        - '&bIsland Size: &f{size}'
+        - '&bIsland Members: &f{members}'
+        - '&bIsland Role: &f{role}'
+    members:
+      material: PLAYER_HEAD
+      name: '&b&lMembers'
+      slot: 4
+    permission:
+      material: CHEST
+      name: '&b&lPermissions'
+      slot: 5
+    upgrades:
+      material: GOLD_NUGGET
+      name: '&6&lUpgrades'
+      slot: 13
+    help:
+      material: BOOK
+      name: '&f&lHelp'
+      slot: 8

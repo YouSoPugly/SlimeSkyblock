@@ -5,6 +5,8 @@ import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.arguments.ALiteralArgument;
+import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
 import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
@@ -13,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.pugly.slimeSkyblock.island.Island;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
+import xyz.pugly.slimeSkyblock.island.flags.IslandFlag;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
 import xyz.pugly.slimeSkyblock.utils.Lang;
 
@@ -22,7 +25,6 @@ public class IslandCommand {
 
     @Default
     public static void island(CommandSender sender) {
-        // Display help message
         sender.sendMessage(Lang.get("island-help"));
     }
 
@@ -32,7 +34,6 @@ public class IslandCommand {
         if (!(sender instanceof Player))
             return;
 
-        // Create island
         IslandManager im = IslandManager.instance();
 
         if (im.inIsland((Player) sender)) {
@@ -46,20 +47,17 @@ public class IslandCommand {
 
     @Subcommand({"go", "home"})
     @Permission("slimeskyblock.island.home")
-    public static void home(CommandSender sender) {
-        if (!(sender instanceof Player))
-            return;
-
+    public static void home(Player player) {
         IslandManager im = IslandManager.instance();
+        Island is = im.getIsland(player.getUniqueId());
 
-        if (!im.inIsland((Player) sender)) {
-            sender.sendMessage(Lang.get("island-not-found"));
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
             return;
         }
 
-        // Teleport to island
-        sender.sendMessage(Lang.get("island-teleporting"));
-        im.getIsland(((Player) sender).getUniqueId()).teleport((Player) sender);
+        player.sendMessage(Lang.get("island-teleporting"));
+        is.teleport(player);
     }
 
     @Subcommand("lock")
@@ -80,7 +78,6 @@ public class IslandCommand {
             return;
         }
 
-        // Lock island
         im.getIsland(((Player) sender).getLocation()).setPrivate(true);
         sender.sendMessage(Lang.get("island-locked"));
     }
@@ -103,7 +100,6 @@ public class IslandCommand {
             return;
         }
 
-        // Unlock island
         im.getIsland(((Player) sender).getLocation()).setPrivate(false);
         sender.sendMessage(Lang.get("island-unlocked"));
     }
@@ -126,7 +122,6 @@ public class IslandCommand {
             return;
         }
 
-        // Set home
         im.getIsland(((Player) sender).getLocation()).setHome(((Player) sender).getLocation());
         sender.sendMessage(Lang.get("island-home-set"));
     }
@@ -288,6 +283,24 @@ public class IslandCommand {
         player.sendMessage(Lang.get("island-left"));
     }
 
+    @Subcommand({"visit", "tp"})
+    @Permission("slimeskyblock.island.visit")
+    public static void visit(Player player, @APlayerArgument OfflinePlayer target) {
+        Island is = IslandManager.instance().getIsland(target.getUniqueId());
+        if (is == null) {
+            player.sendMessage(Lang.get("island-not-found"));
+            return;
+        }
+
+        if (is.isPrivate() || !is.isMember(player)) {
+            player.sendMessage(Lang.get("island-locked-visit"));
+            return;
+        }
+
+        player.sendMessage(Lang.get("island-teleporting"));
+        is.teleport(player);
+    }
+
     @Subcommand({"flag", "flags"})
     @Permission("slimeskyblock.island.flag")
     public static void flag(CommandSender sender) {
@@ -304,5 +317,4 @@ public class IslandCommand {
     public static void help(CommandSender sender) {
         island(sender);
     }
-
 }

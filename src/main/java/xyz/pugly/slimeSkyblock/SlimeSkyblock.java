@@ -3,6 +3,9 @@ package xyz.pugly.slimeSkyblock;
 import com.infernalsuite.aswm.api.AdvancedSlimePaperAPI;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import mc.obliviate.inventory.InventoryAPI;
+import mc.obliviate.inventory.configurable.ConfigurableGuiCache;
+import mc.obliviate.inventory.configurable.GuiConfigurationTable;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.pugly.slimeSkyblock.commands.IslandCommand;
 import xyz.pugly.slimeSkyblock.commands.SlimeSkyblockCommand;
@@ -54,6 +57,11 @@ public final class SlimeSkyblock extends JavaPlugin {
             e.printStackTrace();
         }
 
+        // Obliviate GUI
+        new InventoryAPI(this).init();
+        ConfigurableGuiCache.resetCaches();
+        GuiConfigurationTable.setDefaultConfigurationTable(new GuiConfigurationTable(getConfig()));
+
         // Command API
         CommandAPI.onEnable();
         CommandAPI.registerCommand(IslandCommand.class);
@@ -89,7 +97,7 @@ public final class SlimeSkyblock extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        IslandManager.instance().saveAll(true);
+        IslandManager.instance().forceSaveAll();
         getLogger().info("SlimeSkyblock has been disabled!");
     }
 

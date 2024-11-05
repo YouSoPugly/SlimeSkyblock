@@ -35,12 +35,4 @@ public enum IslandRoles {
         }
         return null;
     }
-
-    public static IslandRoles getRoleByString(String string) {
-        try {
-            return IslandRoles.valueOf(string.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
 }

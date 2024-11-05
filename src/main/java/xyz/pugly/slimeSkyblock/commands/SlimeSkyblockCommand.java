@@ -16,13 +16,11 @@ public class SlimeSkyblockCommand {
 
     @Default
     public static void slimeskyblock(CommandSender sender) {
-        // Display help message
         sender.sendMessage(Lang.get("slime-skyblock-help"));
     }
 
     @Subcommand("reload")
     public static void reload(CommandSender sender) {
-        // Reload the plugin
         sender.sendMessage(Lang.get("slime-skyblock-reloading"));
         SlimeSkyblock.get().reload();
         sender.sendMessage(Lang.get("slime-skyblock-reloaded"));

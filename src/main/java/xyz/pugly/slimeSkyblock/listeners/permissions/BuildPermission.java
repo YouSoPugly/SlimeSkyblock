@@ -27,7 +27,7 @@ public class BuildPermission implements Listener {
         }
 
         if (!is.hasPermission(permission, event.getPlayer())) {
-            event.getPlayer().sendMessage(Lang.get(permission.getName() + "-DENY"));
+            event.getPlayer().sendMessage(Lang.getPermission(permission.getName()));
             event.setCancelled(true);
         }
     }

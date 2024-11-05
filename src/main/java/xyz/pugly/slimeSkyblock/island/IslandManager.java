@@ -13,6 +13,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
 import xyz.pugly.slimeSkyblock.events.IslandCreateEvent;
+import xyz.pugly.slimeSkyblock.island.savers.Saver;
+import xyz.pugly.slimeSkyblock.island.savers.YMLSaver;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,11 +43,13 @@ public class IslandManager {
     private HashMap<UUID, Island> islands;
     private final SlimeLoader loader;
 
-    private final Queue loaded = new LinkedList();
+    private Saver saver;
 
     public IslandManager() {
         instance = this;
         islands = new HashMap<>();
+
+        saver = new YMLSaver("islands");
 
         File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/islands");
         if (!islandFolder.exists()) {
@@ -75,15 +79,17 @@ public class IslandManager {
         return loader;
     }
 
-    public void saveAll(boolean force) {
+    public void forceSaveAll() {
         for (Island island : instance.islands.values()) {
-            if (force)
-                island.forceSave();
-            else
-                island.save();
+            forceSaveIsland(island);
         }
     }
 
+    public void saveAll() {
+        for (Island island : instance.islands.values()) {
+            saveIsland(island);
+        }
+    }
     public void createIsland(Player owner) {
         IslandCreateEvent event = new IslandCreateEvent(owner);
         Bukkit.getPluginManager().callEvent(event);
@@ -116,7 +122,35 @@ public class IslandManager {
     }
 
     public void saveIsland(UUID id) {
-        islands.get(id).save();
+        saveIsland(islands.get(id));
+    }
+
+    public void saveIsland(Island island) {
+        saver.saveIsland(island);
+
+        Bukkit.getScheduler().runTaskAsynchronously(SlimeSkyblock.get(), () -> {
+            try {
+                AdvancedSlimePaperAPI.instance().saveWorld(island.getWorld());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public void forceSaveIsland(UUID id) {
+        forceSaveIsland(islands.get(id));
+    }
+
+    public void forceSaveIsland(Island island) {
+        saveIsland(island);
+
+        if (island.isLoaded()) {
+            try {
+                AdvancedSlimePaperAPI.instance().saveWorld(island.getWorld());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public boolean islandExists(UUID id) {

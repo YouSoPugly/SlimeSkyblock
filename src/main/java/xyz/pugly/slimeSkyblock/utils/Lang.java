@@ -62,6 +62,17 @@ public class Lang {
         }
     }
 
+    public static Component getPermission(String perm) {
+        String key = perm + "-DENY";
+
+        if (!lang.containsKey(key)) {
+            SlimeSkyblock.warn("Language key " + key + " not found!");
+            return get("DEFAULT-DENY");
+        }
+
+        return get(key);
+    }
+
     public static Component get(String key) {
         key = key.toLowerCase();
         if (!lang.containsKey(key)) {
