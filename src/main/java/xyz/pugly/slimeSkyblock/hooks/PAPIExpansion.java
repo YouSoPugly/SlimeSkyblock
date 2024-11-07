@@ -6,13 +6,30 @@ import org.jetbrains.annotations.NotNull;
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
 import xyz.pugly.slimeSkyblock.island.Island;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
+import xyz.pugly.slimeSkyblock.utils.StringUtils;
+
+import java.util.HashMap;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class PAPIExpansion extends PlaceholderExpansion {
 
     private final SlimeSkyblock plugin;
 
+    private final HashMap<String, BiFunction<Player, Island, String>> placeholders = new HashMap<>();
+    private final HashMap<String, String> defaults = new HashMap<>();
+
     public PAPIExpansion(SlimeSkyblock plugin) {
         this.plugin = plugin;
+
+        registerPlaceholder("island_xp", "0", (Player p, Island i) -> String.valueOf(i.getXp()));
+        registerPlaceholder("island_hoppers", "0", (Player p, Island i) -> String.valueOf(i.getHoppers()));
+        registerPlaceholder("island_private", "Private", (Player p, Island i) -> i.isPrivate() ? "Private" : "Public");
+        registerPlaceholder("island_generator_tier", "0", (Player p, Island i) -> String.valueOf(i.getGeneratorTier()));
+        registerPlaceholder("island_member_count", "0", (Player p, Island i) -> String.valueOf(i.getMembers().size()));
+        registerPlaceholder("island_invite_count", "0", (Player p, Island i) -> String.valueOf(i.getInvites().size()));
+        registerPlaceholder("island_ban_count", "0", (Player p, Island i) -> String.valueOf(i.getBans().size()));
+        registerPlaceholder("island_role", "None", (Player p, Island i) -> StringUtils.camelCase(i.getRole(p.getUniqueId()).toString()));
     }
 
     @Override
@@ -38,56 +55,27 @@ public class PAPIExpansion extends PlaceholderExpansion {
         return true;
     }
 
+    public void registerPlaceholder(@NotNull String identifier, String defaultValue, @NotNull BiFunction<Player, Island, String> getter) {
+        placeholders.put(identifier, getter);
+        defaults.put(identifier, defaultValue);
+    }
+
     public String onPlaceholderRequest(Player player, String identifier) {
 
         Island island = IslandManager.instance().getIsland(player.getLocation());
         if (island != null) {
-            return getIslandPlaceholder(island, identifier);
+            return getIslandPlaceholder(player, island, identifier);
         }
 
         island = IslandManager.instance().getIsland(player.getUniqueId());
         if (island != null) {
-            return getIslandPlaceholder(island, identifier);
+            return getIslandPlaceholder(player, island, identifier);
         }
 
-        switch (identifier) {
-            case "island_xp":
-                return "0";
-            case "island_hoppers":
-                return "0";
-            case "island_members":
-                return "0";
-            case "island_invites":
-                return "0";
-            case "island_bans":
-                return "0";
-            case "island_generator_tier":
-                return "0";
-            case "island_role":
-                return "NONE";
-        }
-
-        return null;
+        return defaults.get(identifier);
     }
 
-    public String getIslandPlaceholder(Island island, String identifier) {
-        switch (identifier) {
-            case "island_xp":
-                return String.valueOf(island.getXp());
-            case "island_hoppers":
-                return String.valueOf(island.getHoppers());
-            case "island_members":
-                return String.valueOf(island.getMembers().size());
-            case "island_invites":
-                return String.valueOf(island.getInvites().size());
-            case "island_bans":
-                return String.valueOf(island.getBans().size());
-            case "island_generator_tier":
-                return String.valueOf(island.getGeneratorTier());
-            case "island_role":
-                return island.getRole(island.getOwner().getUniqueId()).toString();
-        }
-
-        return null;
+    public String getIslandPlaceholder(Player player, Island island, String identifier) {
+        return placeholders.getOrDefault(identifier, (p, i) -> null).apply(player, island);
     }
 }

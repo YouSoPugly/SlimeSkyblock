@@ -1,8 +1,11 @@
 package xyz.pugly.slimeSkyblock.island.savers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
 import xyz.pugly.slimeSkyblock.island.Island;
+import xyz.pugly.slimeSkyblock.player.SPlayer;
 
 import java.io.File;
 import java.util.HashSet;
@@ -11,15 +14,28 @@ import java.util.UUID;
 
 public class YMLSaver extends Saver {
 
+    //TODO: Async file management
+
     private String folder;
 
     public YMLSaver(String folder) {
         this.folder = folder;
 
-        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder);
+        File dataFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder);
+        if (!dataFolder.exists()) {
+            dataFolder.mkdirs();
+        }
+
+        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/islands");
         if (!islandFolder.exists()) {
             islandFolder.mkdirs();
         }
+
+        File playerFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/players");
+        if (!playerFolder.exists()) {
+            playerFolder.mkdirs();
+        }
+
     }
 
     public String getFolder() {
@@ -32,7 +48,7 @@ public class YMLSaver extends Saver {
 
     @Override
     public void saveIsland(Island island) {
-        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder);
+        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder + "/islands");
 
         YamlConfiguration islandInfo = new YamlConfiguration();
 
@@ -73,7 +89,7 @@ public class YMLSaver extends Saver {
     // TODO: This method is never called, the Island class & manager need to be adjusted to make this work.
     @Override
     public Island loadIsland(String islandID) {
-        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder);
+        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder + "/islands");
 
         File islandFile = new File(islandFolder, islandID + ".yml");
         if (!islandFile.exists()) {
@@ -91,7 +107,7 @@ public class YMLSaver extends Saver {
 
     @Override
     public Set<String> getIslandIDs() {
-        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder);
+        File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder + "/islands");
 
         Set<String> islandIDs = new HashSet<>();
         for (File file : islandFolder.listFiles()) {
@@ -101,5 +117,61 @@ public class YMLSaver extends Saver {
         }
 
         return islandIDs;
+    }
+
+    @Override
+    public void savePlayer(SPlayer player) {
+        File playerFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder + "/players");
+
+        YamlConfiguration playerInfo = new YamlConfiguration();
+
+        playerInfo.set("islands", player.getIslands());
+
+        try {
+            playerInfo.save(new File(playerFolder, player.getPlayer().getUniqueId() + ".yml"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public SPlayer loadPlayer(String playerID) {
+
+        File playerFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder + "/players");
+
+        File playerFile = new File(playerFolder, playerID + ".yml");
+        if (!playerFile.exists()) {
+            return null;
+        }
+
+        YamlConfiguration playerInfo = new YamlConfiguration();
+        try {
+            playerInfo.load(playerFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Player player = Bukkit.getPlayer(UUID.fromString(playerID));
+
+        UUID mainIsland = playerInfo.getString("mainIsland") != null ? UUID.fromString(playerInfo.getString("mainIsland")) : null;
+
+        HashSet<UUID> islands = new HashSet<>();
+        islands = (HashSet<UUID>) playerInfo.get("islands", islands);
+
+        return new SPlayer(player, mainIsland, islands);
+    }
+
+    @Override
+    public Set<String> getPlayerIDs() {
+        File playerFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/" + folder + "/players");
+
+        Set<String> playerIDs = new HashSet<>();
+        for (File file : playerFolder.listFiles()) {
+            if (file.getName().endsWith(".yml")) {
+                playerIDs.add(file.getName().replace(".yml", ""));
+            }
+        }
+
+        return playerIDs;
     }
 }

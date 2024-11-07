@@ -17,6 +17,7 @@ import xyz.pugly.slimeSkyblock.island.Island;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
 import xyz.pugly.slimeSkyblock.island.flags.IslandFlag;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
+import xyz.pugly.slimeSkyblock.player.PlayerManager;
 import xyz.pugly.slimeSkyblock.utils.Lang;
 
 @Command("island")
@@ -49,7 +50,7 @@ public class IslandCommand {
     @Permission("slimeskyblock.island.home")
     public static void home(Player player) {
         IslandManager im = IslandManager.instance();
-        Island is = im.getIsland(player.getUniqueId());
+        Island is = im.getIsland(PlayerManager.getSPlayer(player).getMainIsland());
 
         if (is == null) {
             player.sendMessage(Lang.get("island-not-found"));

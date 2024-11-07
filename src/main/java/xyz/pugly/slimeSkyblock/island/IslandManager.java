@@ -13,17 +13,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import xyz.pugly.slimeSkyblock.SlimeSkyblock;
 import xyz.pugly.slimeSkyblock.events.IslandCreateEvent;
-import xyz.pugly.slimeSkyblock.island.savers.Saver;
-import xyz.pugly.slimeSkyblock.island.savers.YMLSaver;
+import xyz.pugly.slimeSkyblock.player.PlayerManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.UUID;
 
 public class IslandManager {
+
+    //TODO: make this a static class
 
     // Instance of the IslandManager
 
@@ -43,13 +42,9 @@ public class IslandManager {
     private HashMap<UUID, Island> islands;
     private final SlimeLoader loader;
 
-    private Saver saver;
-
     public IslandManager() {
         instance = this;
         islands = new HashMap<>();
-
-        saver = new YMLSaver("islands");
 
         File islandFolder = new File(SlimeSkyblock.get().getDataFolder().getPath() + "/islands");
         if (!islandFolder.exists()) {
@@ -59,17 +54,17 @@ public class IslandManager {
         for (File file : islandFolder.listFiles()) {
             if (file.getName().endsWith(".yml")) {
                 String id = file.getName().replace(".yml", "");
-                YamlConfiguration islandInfo = new YamlConfiguration(); 
+                YamlConfiguration islandInfo = new YamlConfiguration();
                 try {
                     islandInfo.load(file);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                
+
                 islands.put(UUID.fromString(id), new Island(UUID.fromString(id), islandInfo));
             }
         }
-        
+
         SlimeSkyblock.info("Loaded " + islands.size() + " islands.");
 
         loader = new FileLoader(new File("islands"));
@@ -97,6 +92,7 @@ public class IslandManager {
             return;
         }
         islands.put(owner.getUniqueId(), new Island(owner.getUniqueId(), owner));
+        PlayerManager.getSPlayer(owner).setMainIsland(owner.getUniqueId());
         loadIsland(owner.getUniqueId());
     }
 
@@ -126,7 +122,7 @@ public class IslandManager {
     }
 
     public void saveIsland(Island island) {
-        saver.saveIsland(island);
+        SlimeSkyblock.getSaver().saveIsland(island);
 
         Bukkit.getScheduler().runTaskAsynchronously(SlimeSkyblock.get(), () -> {
             try {

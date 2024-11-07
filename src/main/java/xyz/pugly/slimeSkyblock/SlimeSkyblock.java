@@ -14,6 +14,8 @@ import xyz.pugly.slimeSkyblock.events.PluginInitializeEvent;
 import xyz.pugly.slimeSkyblock.hooks.PAPIExpansion;
 import xyz.pugly.slimeSkyblock.island.IslandManager;
 import xyz.pugly.slimeSkyblock.island.permissions.IslandPermission;
+import xyz.pugly.slimeSkyblock.island.savers.Saver;
+import xyz.pugly.slimeSkyblock.island.savers.YMLSaver;
 import xyz.pugly.slimeSkyblock.listeners.BlockBreak;
 import xyz.pugly.slimeSkyblock.listeners.BlockForm;
 import xyz.pugly.slimeSkyblock.listeners.BlockPlace;
@@ -33,6 +35,7 @@ import xyz.pugly.slimeSkyblock.listeners.permissions.NameEntityPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.SignPermission;
 import xyz.pugly.slimeSkyblock.listeners.permissions.SpawnerPermissions;
 import xyz.pugly.slimeSkyblock.listeners.permissions.UsePermissions;
+import xyz.pugly.slimeSkyblock.player.PlayerManager;
 import xyz.pugly.slimeSkyblock.utils.Lang;
 
 import java.io.File;
@@ -40,6 +43,7 @@ import java.io.File;
 public final class SlimeSkyblock extends JavaPlugin {
 
     private static SlimeSkyblock instance;
+    private static Saver saver;
 
     private BlockForm blockForm;
 
@@ -92,6 +96,8 @@ public final class SlimeSkyblock extends JavaPlugin {
         PluginInitializeEvent event = new PluginInitializeEvent();
         getServer().getPluginManager().callEvent(event);
 
+        saver = new YMLSaver("data");
+
         // Plugin startup logic
         IslandManager.instance();
         Lang.load(getConfig().getString("language"));
@@ -109,6 +115,7 @@ public final class SlimeSkyblock extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         IslandManager.instance().forceSaveAll();
+        PlayerManager.saveAllPlayers();
         getLogger().info("SlimeSkyblock has been disabled!");
     }
 
@@ -155,5 +162,9 @@ public final class SlimeSkyblock extends JavaPlugin {
 
     public boolean usePAPI() {
         return PAPI;
+    }
+
+    public static Saver getSaver() {
+        return saver;
     }
 }
